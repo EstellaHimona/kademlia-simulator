@@ -16,12 +16,18 @@ import peersim.core.Node;
 public class CustomDistribution implements peersim.core.Control {
 
   private static final String PAR_PROT = "protocol";
+  private static final String PAR_PROT_EVIL_KAD = "protocolEvilkad";
 
-  private int protocolID;
+  /* Protocol identifier for Kademlia nodes */
+  private int protocolKadID;
   private UniformRandomGenerator urg;
 
+  /* Protocol identifier of malicious Kademlia nodes */
+  private int protocolEvilKadID;
+
   public CustomDistribution(String prefix) {
-    protocolID = Configuration.getPid(prefix + "." + PAR_PROT);
+    protocolKadID = Configuration.getPid(prefix + "." + PAR_PROT);
+    protocolEvilKadID = Configuration.getPid(prefix + "." + PAR_PROT_EVIL_KAD, protocolKadID);
     urg = new UniformRandomGenerator(KademliaCommonConfig.BITS, CommonState.r);
   }
 
@@ -32,6 +38,8 @@ public class CustomDistribution implements peersim.core.Control {
    * @return boolean always false
    */
   public boolean execute() {
+    int numEvilNodes = 10;
+
     // BigInteger tmp;
     for (int i = 0; i < Network.size(); ++i) {
       Node generalNode = Network.get(i);
@@ -43,11 +51,21 @@ public class CustomDistribution implements peersim.core.Control {
       // node = new KademliaNode(id, randomIpAddress(r), 0);
       node = new KademliaNode(id, "0.0.0.0", 0);
 
-      KademliaProtocol kadProt = ((KademliaProtocol) (Network.get(i).getProtocol(protocolID)));
+      KademliaProtocol kadProt = null;
+
+      /* Generate benign and malicious nodes */
+      if ((i > 0) && (i < (numEvilNodes + 1))) {
+        kadProt = ((KademliaProtocol) (Network.get(i).getProtocol(protocolEvilKadID)));
+        kadProt.setProtocolID(protocolEvilKadID);
+        node.setEvil(true);
+      } else {
+        kadProt = ((KademliaProtocol) (Network.get(i).getProtocol(protocolKadID)));
+        kadProt.setProtocolID(protocolKadID);
+      }
 
       generalNode.setKademliaProtocol(kadProt);
       kadProt.setNode(node);
-      kadProt.setProtocolID(protocolID);
+      kadProt.setProtocolID(protocolKadID);
     }
 
     return false;
