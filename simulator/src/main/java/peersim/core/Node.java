@@ -20,6 +20,7 @@ package peersim.core;
 
 import peersim.kademlia.KademliaProtocol;
 import peersim.kademlia.das.DASProtocol;
+import peersim.kademlia.KademliaMalicious;;
 
 /**
  * Class that represents one node with a network address. An {@link Network} is made of a set of
@@ -107,4 +108,10 @@ public interface Node extends Fallible, Cloneable {
    * Protocols.
    */
   public void setDASProtocol(DASProtocol proto);
+
+
+public KademliaMalicious getKademliaMalicious();
+
+public void setKademliaMalicious(KademliaMalicious proto);
+
 }

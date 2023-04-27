@@ -1,6 +1,8 @@
 package peersim.kademlia;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import peersim.config.Configuration;
 import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.core.Network;
+import peersim.kademlia.operations.OpLogging;
 import peersim.util.IncrementalStats;
 
 /**
@@ -131,6 +134,20 @@ public class KademliaObserver implements Control {
     }
     if (!find_log.isEmpty()) {
       writeMapFind(find_log, logFolderName + "/" + "operation.csv");
+    }
+    try (BufferedReader br = new BufferedReader(new FileReader("messages.csv"))) {
+      int cnt = 0;
+      while (br.readLine() != null) {
+        cnt++;
+      }
+      System.out.println("Number of lines: " + cnt);
+
+      FileWriter wr = new FileWriter("length.csv", true);
+      wr.write(cnt + "," + "0.3" + "\n");
+      wr.close();
+      System.out.println("Number of lines: " + cnt);
+    } catch (IOException e) {
+      System.out.println("Error reading or writing file!");
     }
   }
 
