@@ -21,6 +21,7 @@ package peersim.core;
 import peersim.config.*;
 import peersim.kademlia.KademliaMalicious;
 import peersim.kademlia.KademliaProtocol;
+import peersim.kademlia.KademliaMalicious;
 import peersim.kademlia.das.DASProtocol;
 
 /** This is the default {@link Node} class that is used to compose the {@link Network}. */
