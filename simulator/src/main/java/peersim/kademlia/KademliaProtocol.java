@@ -25,11 +25,12 @@ import peersim.edsim.EDProtocol;
 import peersim.edsim.EDSimulator;
 import peersim.kademlia.operations.FindOperation;
 import peersim.kademlia.operations.GetOperation;
+import peersim.kademlia.operations.OpLogging;
 import peersim.kademlia.operations.PutOperation;
 import peersim.transport.UnreliableTransport;
 
 // __________________________________________________________________________________________________
-public class KademliaProtocol implements Cloneable, EDProtocol {
+public class KademliaProtocol implements EDProtocol {
 
   // VARIABLE PARAMETERS
   final String PAR_K = "K";
@@ -401,6 +402,33 @@ public class KademliaProtocol implements Cloneable, EDProtocol {
         }
       }
     }
+
+    // Check whether the message send was successful
+    boolean successful = false;
+    if (m.type == Message.MSG_FIND_DIST) {
+      successful = true;
+      // System.out.println("Message target: " + m + "!!!");
+
+      // Write the message in a file. This message is the node we are looking for.
+      // String fileName = "targetMessages.csv";
+
+      // try {
+      //   FileWriter fileWriter = new FileWriter(fileName);
+
+      //   fileWriter.write("" + m);
+      //   fileWriter.close();
+
+      //   System.out.println("Successfuly wrote message to file");
+      // } catch (IOException e) {
+      //   System.out.println("An error occured!");
+      //   e.printStackTrace();
+      // }
+
+    }
+
+    if (m.type == Message.MSG_INIT_GET) {
+      System.out.println("Message received: " + m);
+    }
   }
 
   /**
@@ -463,6 +491,8 @@ public class KademliaProtocol implements Cloneable, EDProtocol {
       case Message.MSG_INIT_FIND:
         m = (Message) event;
         handleInit(m, myPid);
+        System.out.println("MSG_INIT_FIND received");
+        System.out.println("Message received: " + m + "!!!");
         break;
       case Message.MSG_INIT_GET:
         m = (Message) event;
