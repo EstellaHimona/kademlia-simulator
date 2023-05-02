@@ -43,7 +43,7 @@ public class TrafficGenerator implements Control {
     while (!n.isUp()) {
       n = Network.get(CommonState.r.nextInt(Network.size()));
     }
-    BigInteger dst = ((KademliaProtocol) (n.getProtocol(pid))).getKademliaNode().getId();
+    BigInteger dst = ((KademliaProtocol) (n.getKademliaProtocol())).getKademliaNode().getId();
 
     Message m = Message.makeInitFindNode(dst);
     m.timestamp = CommonState.getTime();
@@ -66,7 +66,7 @@ public class TrafficGenerator implements Control {
 
     // send message
     EDSimulator.add(0, generateFindNodeMessage(), start, pid);
-    System.out.println("Message target: " + start);
+    //    System.out.println("Message target: " + start);
 
     return false;
   }

@@ -113,8 +113,8 @@ public class Turbulence implements Control {
           public int compare(Object o1, Object o2) {
             Node n1 = (Node) o1;
             Node n2 = (Node) o2;
-            KademliaProtocol p1 = (KademliaProtocol) (n1.getProtocol(kademliaid));
-            KademliaProtocol p2 = (KademliaProtocol) (n2.getProtocol(kademliaid));
+            KademliaProtocol p1 = (KademliaProtocol) (n1.getKademliaProtocol());
+            KademliaProtocol p2 = (KademliaProtocol) (n2.getKademliaProtocol());
             return Util.put0(p1.getKademliaNode().getId())
                 .compareTo(Util.put0(p2.getKademliaNode().getId()));
           }
@@ -188,7 +188,7 @@ public class Turbulence implements Control {
     System.out.println("Adding node " + count);
 
     // get kademlia protocol of new node
-    KademliaProtocol newKad = (KademliaProtocol) (newNode.getProtocol(kademliaid));
+    KademliaProtocol newKad = (KademliaProtocol) (newNode.getKademliaProtocol());
     newNode.setKademliaProtocol(newKad);
     newKad.setProtocolID(kademliaid);
     // newNode.setProtocol(kademliaid, newKad);
@@ -196,7 +196,7 @@ public class Turbulence implements Control {
     UniformRandomGenerator urg =
         new UniformRandomGenerator(KademliaCommonConfig.BITS, CommonState.r);
     KademliaNode node = new KademliaNode(urg.generate(), "127.0.0.1", 0);
-    ((KademliaProtocol) (newNode.getProtocol(kademliaid))).setNode(node);
+    ((KademliaProtocol) (newNode.getKademliaProtocol())).setNode(node);
 
     // sort network
     sortNet();
@@ -214,8 +214,7 @@ public class Turbulence implements Control {
     // perform initialization
     newKad
         .getRoutingTable()
-        .addNeighbour(
-            ((KademliaProtocol) (start.getProtocol(kademliaid))).getKademliaNode().getId());
+        .addNeighbour(((KademliaProtocol) (start.getKademliaProtocol())).getKademliaNode().getId());
 
     // start auto-search
     EDSimulator.add(0, m, newNode, kademliaid);

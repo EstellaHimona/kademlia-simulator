@@ -126,6 +126,7 @@ public class Network {
       for (int i = 0; i < len; ++i) {
         node[i] = (Node) prototype.clone();
         node[i].setIndex(i);
+        // This id is always null it seems.
         KademliaProtocol id = node[i].getKademliaProtocol();
       }
     }

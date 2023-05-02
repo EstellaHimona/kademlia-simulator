@@ -141,7 +141,7 @@ public class KademliaMalicious extends KademliaProtocol {
       m = (inf + sup) / 2;
 
       BigInteger mId =
-          ((KademliaMalicious) Network.get(m).getProtocol(kademliaid)).getKademliaNode().getId();
+          ((KademliaProtocol) Network.get(m).getKademliaProtocol()).getKademliaNode().getId();
 
       if (mId.equals(searchNodeId)) return Network.get(m);
 
@@ -152,7 +152,7 @@ public class KademliaMalicious extends KademliaProtocol {
     // perform a traditional search for more reliability (maybe the network is not ordered)
     BigInteger mId;
     for (int i = Network.size() - 1; i >= 0; i--) {
-      mId = ((KademliaMalicious) Network.get(i).getProtocol(kademliaid)).getKademliaNode().getId();
+      mId = ((KademliaProtocol) Network.get(i).getKademliaProtocol()).getKademliaNode().getId();
       if (mId.equals(searchNodeId)) return Network.get(i);
     }
 
@@ -296,7 +296,7 @@ public class KademliaMalicious extends KademliaProtocol {
     // Declare the neighbours array but not initialise it (empty array)
 
     BigInteger[] neighbours = new BigInteger[0];
-    System.out.println("££££££££££Malicious protocol assigned");
+    // System.out.println("££££££££££Malicious protocol assigned");
 
     // if (m.getType() == Message.MSG_FIND || m.getType() == Message.MSG_GET) {
     //   neighbours = this.routingTable.getNeighbours((BigInteger) m.body, m.src.getId());
@@ -460,7 +460,6 @@ public class KademliaMalicious extends KademliaProtocol {
         m = (Message) event;
         handleInit(m, myPid);
         System.out.println("MSG_INIT_FIND received malicious");
-        // System.out.println("Message received: " + m + "!!!");
         break;
       case Message.MSG_INIT_GET:
         m = (Message) event;

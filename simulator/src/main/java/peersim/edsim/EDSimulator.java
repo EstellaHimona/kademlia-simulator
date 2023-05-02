@@ -268,7 +268,7 @@ public class EDSimulator {
               System.out.println("Event: " + ev.toString());
               return false;
           }*/
-          prot = (EDProtocol) ev.node.getProtocol(pid);
+          prot = (EDProtocol) ev.node.getKademliaProtocol();
         } catch (ClassCastException e) {
           e.printStackTrace();
           throw new IllegalArgumentException(

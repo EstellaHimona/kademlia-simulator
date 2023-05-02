@@ -18,7 +18,6 @@
 
 package peersim.core;
 
-import peersim.kademlia.KademliaMalicious;
 import peersim.kademlia.KademliaProtocol;
 import peersim.kademlia.das.DASProtocol;
 
@@ -108,8 +107,4 @@ public interface Node extends Fallible, Cloneable {
    * Protocols.
    */
   public void setDASProtocol(DASProtocol proto);
-
-  public KademliaMalicious getKademliaMalicious();
-
-  public void setKademliaMalicious(KademliaMalicious proto);
 }

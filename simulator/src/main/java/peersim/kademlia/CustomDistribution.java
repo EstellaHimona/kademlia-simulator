@@ -20,18 +20,16 @@ public class CustomDistribution implements peersim.core.Control {
 
   /* Protocol identifier for Kademlia nodes */
   private int protocolKadID;
+  private int evilprotocolID;
   private UniformRandomGenerator urg;
-
-  /* Protocol identifier of malicious Kademlia nodes */
-  private int protocolEvilKadID;
 
   /* Declare number of malicious nodes */
   // private int numEvilNodes = (int) (Network.size() * 0.3);
 
   public CustomDistribution(String prefix) {
     protocolKadID = Configuration.getPid(prefix + "." + PAR_PROT);
-    protocolEvilKadID = Configuration.getPid(prefix + "." + PAR_PROT_EVIL_KAD, protocolKadID);
     urg = new UniformRandomGenerator(KademliaCommonConfig.BITS, CommonState.r);
+    evilprotocolID = Configuration.getPid(prefix + "." + PAR_PROT_EVIL_KAD);
   }
 
   /**
@@ -42,8 +40,14 @@ public class CustomDistribution implements peersim.core.Control {
    */
   public boolean execute() {
 
+    int evil_share = Configuration.getInt("nodes" + "." + "evil_share");
+    float evil_percent = (float) evil_share / 100;
+
+    System.out.println("Evil share: " + evil_share);
+    System.out.println("Evil percent: " + evil_percent);
+
     // set the number of evil nodes
-    int numEvilNodes = (int) (Network.size() * 0.5);
+    int numEvilNodes = (int) (Network.size() * evil_percent);
     System.out.println("Number of evil nodes: " + numEvilNodes);
 
     // BigInteger tmp;
@@ -60,18 +64,16 @@ public class CustomDistribution implements peersim.core.Control {
       KademliaProtocol kadProt = null;
 
       /* Generate benign and malicious nodes */
-      if ((i > 0) && (i < (numEvilNodes + 1))) {
-        kadProt = ((KademliaProtocol) (Network.get(i).getProtocol(protocolEvilKadID)));
-        kadProt.setProtocolID(protocolEvilKadID);
+      if ((i > 0) && (i < (1 + numEvilNodes))) {
+        kadProt = ((KademliaMalicious) (Network.get(i).getProtocol(evilprotocolID)));
+        kadProt.setProtocolID(evilprotocolID);
         node.setEvil(true);
       } else {
         kadProt = ((KademliaProtocol) (Network.get(i).getProtocol(protocolKadID)));
         kadProt.setProtocolID(protocolKadID);
       }
-
-      generalNode.setKademliaProtocol(kadProt);
       kadProt.setNode(node);
-      kadProt.setProtocolID(protocolKadID);
+      generalNode.setKademliaProtocol(kadProt);
     }
 
     return false;

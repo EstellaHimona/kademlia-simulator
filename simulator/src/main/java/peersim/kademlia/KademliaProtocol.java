@@ -106,8 +106,6 @@ public class KademliaProtocol implements EDProtocol {
     tid = Configuration.getPid(prefix + "." + PAR_TRANSPORT);
 
     kv = new KeyValueStore();
-
-    // System.out.println("New kademliaprotocol");
   }
 
   /**
@@ -150,7 +148,7 @@ public class KademliaProtocol implements EDProtocol {
       m = (inf + sup) / 2;
 
       BigInteger mId =
-          ((KademliaProtocol) Network.get(m).getProtocol(kademliaid)).getKademliaNode().getId();
+          ((KademliaProtocol) Network.get(m).getKademliaProtocol()).getKademliaNode().getId();
 
       if (mId.equals(searchNodeId)) return Network.get(m);
 
@@ -161,7 +159,7 @@ public class KademliaProtocol implements EDProtocol {
     // perform a traditional search for more reliability (maybe the network is not ordered)
     BigInteger mId;
     for (int i = Network.size() - 1; i >= 0; i--) {
-      mId = ((KademliaProtocol) Network.get(i).getProtocol(kademliaid)).getKademliaNode().getId();
+      mId = ((KademliaProtocol) Network.get(i).getKademliaProtocol()).getKademliaNode().getId();
       if (mId.equals(searchNodeId)) return Network.get(i);
     }
 
@@ -339,7 +337,6 @@ public class KademliaProtocol implements EDProtocol {
    * @param myPid the sender Pid
    */
   private void handleInit(Message m, int myPid) {
-
     logger.info("handleInitFind " + (BigInteger) m.body);
     KademliaObserver.find_op.add(1);
 
